@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Četník - Počítadlo písmen</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDI1NiAyNTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiByeD0iNDAiIGZpbGw9IiNGRkIzMDAiLz4KPHJlY3QgeD0iMTI4IiB5PSI0OCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2MCIgZmlsbD0iI0ZGRkZGRiIvPgo8cmVjdCB4PSI4MCIgeT0iMTI4IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYwIiB0cmFuc2Zvcm09InJvdGF0ZSgtOTAgODAgMTI4KSIgZmlsbD0iI0ZGRkZGRiIvPgo8Y2lyY2xlIGN4PSIxMjgiIGN5PSIxMjgiIHI9IjI0IiBmaWxsPSIjRkZCMzAwIi8+CjxjaXJjbGUgY3g9IjEyOCIgY3k9IjEyOCIgcj0iMTYiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTE1MiAxMjhMMTkyIDE2OEwxNTIgMjA4TDEyIDE2OEwxNTIgMTI4WiIgZmlsbD0iIzRGNDZFNCIgb3BhY2l0eT0iMC44Ii8+Cjwvc3ZnPg==">
+  <link rel="icon" type="image/png" sizes="32x32"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAABP0lEQVR4nO2Wv0vDQBTHP5Ek5s+BEuwf4F+goJM4uFRw6eIiuOggOHcQnHQodOskOHQQ3EQcFJ3EoTiIoKDQ0MEL9nRqbC9pW8m9oH3f8Xj3ftx7930vEEL8a5R9sKq2Bz5NAWo8nmDMS2AbZ0pADc2b/BewBrTA2n4o7QKUy6cY0wRmiu5IKY5YW7sPvIsjFeYIY47HGl/0mJ2dA+7iSoUxoFQ6w9p24KY1E+tAPCYNb4DOq0u1+gjAoqfhxQScBnx0pC9co+0ScD3q2ZwG3KLRRUXv13oK2I/L8wF+BfR/ML8CPHc5SeB3QAXovLxUq3fZNCB8l1s2O37hDygWjzHmBZiZ9LMF4JBK5dH3nX/qEeYpMGsF5vs8C4UvYBeYHq8CmsBe1Jfef43zE5hVb+5nAAAAAElFTkSuQmCC">
+  <link rel="icon" type="image/png" sizes="16x16"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABB0lEQVQ4jZ2Tv0vDQBTHP2mS/gM6dRB0cxBcHHRwcHFwcHAQ3FwcHBwEdwcHcRDBQQcHFwdFEAcRFAQVFHQoSZ+C9FvH9NJrL6mVvC+f3L3P5b2X9wIp5X9H2Q1lrT1w3w0A3AC7wBDYwg8BrAOvUxqdg7+7fAI3fqXE9Q/wIhHfLmPAvUr7a84PAaVSA2PugNkM3gG2qVRaYe/8TNCu38Dat4w9V8A5cO/Pzu8E9fo11r4CSxl7WsAZcJufgGbzEWvfgYWMPS/ACfCUn4Bm8wFr34DFjD1PwDHw4qwN9r3axaAUDPYCYBc4BPa8qgFHwCHw6dUScOD9D996BfwA5p1Iq9q9gykAAAAASUVORK5CYII=">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚨</text></svg>">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="description"
+    content="Analyzátor textu pro počítání znaků, písmen, diakritiky a symbolů s pokročilými funkcemi.">
+  <meta name="keywords" content="text analyzer, character counter, letter counter, diacritics, český analyzátor">
+  <meta name="author" content="Četník">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Četník - Analyzátor textu">
+  <meta property="og:description" content="Analyzátor textu pro počítání znaků a písmen">
+  <meta property="og:image" content="https://via.placeholder.com/1200x630/4f46e5/ffffff?text=🚨%20Četník">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Četník - Analyzátor textu">
+  <meta property="twitter:description" content="Analyzátor textu pro počítání znaků a písmen">
+  <meta property="twitter:image" content="https://via.placeholder.com/1200x630/4f46e5/ffffff?text=🚨%20Četník">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- External JS - Deferred for performance -->
+  <script src="js/script.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon" aria-hidden="true">🚨</span>
+          <h1>Četník</h1>
+        </div>
+        <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Přepnout tmavý režim"
+          title="Přepnout tmavý/světlý režim">
+          <span class="theme-icon" id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Input Section -->
+    <div class="input-section">
+      <div class="input-wrapper">
+        <label for="inputText">Zadejte text k analýze:</label>
+        <div class="textarea-wrapper" id="textareaWrapper">
+          <textarea id="inputText"
+            placeholder="Napište nebo vložte text, který chcete analyzovat... nebo přetáhněte textový soubor"
+            oninput="handleInput()" aria-describedby="charCounter"></textarea>
+          <span id="charCounter" class="char-counter" aria-live="polite">0 znaků</span>
+        </div>
+        <div class="discount-toggle-row">
+          <button type="button" class="discount-toggle" onclick="toggleDiscount()" id="discountToggle">
+            <span class="discount-icon">➖</span>
+            <span class="discount-text">Odečíst znaky z výsledků</span>
+            <span class="case-info">odečíst</span>
+            <span class="discount-arrow">▼</span>
+          </button>
+
+          <label class="switch-label">
+            <div class="switch">
+              <input type="checkbox" id="caseSensitiveToggle" onchange="toggleCaseSensitive()">
+              <span class="slider"></span>
+            </div>
+            <span class="toggle-text" id="caseSensitiveText">Rozlišovat velikost (a/A)</span>
+          </label>
+        </div>
+        <div class="button-row">
+          <button type="button" class="btn-secondary icon-button" onclick="clearText()" id="clearBtn" disabled
+            aria-label="Vymazat text">
+            <span>✕</span>
+            <span>Vymazat</span>
+          </button>
+          <button type="button" class="btn-secondary icon-button" onclick="document.getElementById('fileInput').click()"
+            aria-label="Nahrát soubor">
+            <span>📁</span>
+            <span>Nahrát soubor</span>
+          </button>
+          <input type="file" id="fileInput" accept=".txt,.text" style="display: none;"
+            onchange="handleFileUpload(event)" aria-label="Vybrat textový soubor">
+        </div>
+      </div>
+    </div>
+
+    <!-- Discount Section -->
+    <div class="discount-section" id="discountSection" style="display: none;">
+      <div class="input-wrapper">
+        <label for="discountText">Odečíst znaky z výsledků:</label>
+        <div class="textarea-wrapper">
+          <textarea id="discountText"
+            placeholder="Zadejte znaky, které chcete odečíst (např.: aaabb → odečte 3× a, 2× b)."
+            oninput="handleDiscountInput()" rows="2"></textarea>
+          <span id="discountCounter" class="char-counter">0 znaků</span>
+        </div>
+        <div class="discount-example">
+          Příklady: "á" odečte 1× A i 1× ´, "F" odečte 1× F (malé i velké), "FfÁ" = odečte 2× F a 1× A i 1× ´
+        </div>
+        <div class="button-row">
+          <button type="button" class="btn-secondary icon-button" onclick="clearDiscount()" id="clearDiscountBtn"
+            disabled>
+            <span>✕</span>
+            <span>Vymazat</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar" style="display: none;">
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">🔤</div>
+        <div class="stat-value" id="totalChars">0</div>
+        <div class="stat-label">Celkem<br>znaků</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">✏️</div>
+        <div class="stat-value" id="totalLetters">0</div>
+        <div class="stat-label">Písmen</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">´</div>
+        <div class="stat-value" id="totalDiacritics">0</div>
+        <div class="stat-label">Diakritiky</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">🔣</div>
+        <div class="stat-value" id="totalSymbols">0</div>
+        <div class="stat-label">Symbolů</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" aria-hidden="true">🔢</div>
+        <div class="stat-value" id="totalNumbers">0</div>
+        <div class="stat-label">Číslic</div>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+      <div class="results-header">
+        <h2 class="results-title">📊 Výsledky</h2>
+        <div class="view-toggle" role="tablist" aria-label="Filtr zobrazení">
+          <button type="button" class="view-btn active" onclick="setView('all')" id="viewAll" role="tab"
+            aria-selected="true" aria-label="Zobrazit vše">
+            🎯 Vše
+          </button>
+          <button type="button" class="view-btn" onclick="setView('letters')" id="viewLetters" role="tab"
+            aria-selected="false" aria-label="Zobrazit pouze písmena">
+            🔤 Písmena
+          </button>
+          <button type="button" class="view-btn" onclick="setView('diacritics')" id="viewDiacritics" role="tab"
+            aria-selected="false" aria-label="Zobrazit pouze diakritiku">
+            ´ Diakritika
+          </button>
+          <button type="button" class="view-btn" onclick="setView('symbols')" id="viewSymbols" role="tab"
+            aria-selected="false" aria-label="Zobrazit pouze symboly">
+            🔣 Symboly
+          </button>
+          <button type="button" class="view-btn" onclick="setView('numbers')" id="viewNumbers" role="tab"
+            aria-selected="false" aria-label="Zobrazit pouze čísla">
+            🔢 Čísla
+          </button>
+        </div>
+      </div>
+
+      <div id="results" role="region" aria-live="polite">
+        <div class="empty-state">
+          <span class="empty-state-icon" aria-hidden="true">📝</span>
+          <p>Začněte psaním textu výše</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>🚨 Četník - Počítadlo písmen</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
