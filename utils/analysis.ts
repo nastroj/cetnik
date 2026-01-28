@@ -1,6 +1,5 @@
-
-import { AnalysisResults, CharacterCounts } from '../types';
-import { STANDALONE_TO_COMBINING } from '../constants';
+import { AnalysisResults, CharacterCounts, SortMode } from '../types';
+import { STANDALONE_TO_COMBINING, DIACRITIC_DISPLAY } from '../constants';
 
 const isLetter = (char: string) => /[a-zA-Z]/.test(char);
 const isNumber = (char: string) => /[0-9]/.test(char);
@@ -76,4 +75,34 @@ export function parseDiscount(text: string, isCaseSensitive: boolean): Character
   }
 
   return discountMap;
+}
+
+export function sortCharacters(chars: [string, number][], mode: SortMode, isCaseSensitive: boolean): [string, number][] {
+  if (mode === 'frequency') {
+    return chars.sort((a, b) => b[1] - a[1]);
+  }
+
+  // Alphabetical sort (A-Z, then diacritics, symbols, numbers)
+  return chars.sort((a, b) => {
+    const charA = a[0];
+    const charB = b[0];
+
+    const getCharType = (char: string): number => {
+      if (/^[a-zA-Z]$/.test(char)) return 0; // Letters first
+      if (char.includes('_') || DIACRITIC_DISPLAY[char]) return 1; // Diacritics second
+      if (/^[0-9]$/.test(char)) return 3; // Numbers last
+      return 2; // Symbols in between
+    };
+
+    const typeA = getCharType(charA);
+    const typeB = getCharType(charB);
+
+    if (typeA !== typeB) return typeA - typeB;
+
+    // Within same type, sort alphabetically
+    const displayA = DIACRITIC_DISPLAY[charA] || charA.split('_')[0] || charA;
+    const displayB = DIACRITIC_DISPLAY[charB] || charB.split('_')[0] || charB;
+
+    return displayA.localeCompare(displayB, 'cs', { sensitivity: isCaseSensitive ? 'case' : 'base' });
+  });
 }

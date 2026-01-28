@@ -15,10 +15,9 @@
     "moduleDetection": "force",
     "allowJs": true,
     "jsx": "react-jsx",
+    "baseUrl": "./cetnik",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
     },
     "allowImportingTsExtensions": true,
     "noEmit": true

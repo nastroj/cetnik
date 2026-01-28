@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card } from './components/Card';
-import { analyzeText, parseDiscount } from './utils/analysis';
-import { AnalysisResults, AnalysisCategory, CharacterCounts, Stats } from './types';
+import { analyzeText, parseDiscount, sortCharacters } from './utils/analysis';
+import { AnalysisResults, AnalysisCategory, CharacterCounts, Stats, SortMode } from './types';
 import { DIACRITIC_DISPLAY } from './constants';
 
 const App: React.FC = () => {
@@ -12,6 +11,7 @@ const App: React.FC = () => {
   const [isDiscountOpen, setIsDiscountOpen] = useState(false);
   const [category, setCategory] = useState<AnalysisCategory>('all');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [sortMode, setSortMode] = useState<SortMode>('alphabetical');
 
   // Sync theme
   useEffect(() => {
@@ -113,11 +113,11 @@ const App: React.FC = () => {
         <Card className="dark:bg-slate-900 dark:border-slate-700/50">
           <div className="space-y-4">
             <div className="flex justify-between items-end">
-              <label htmlFor="main-input" className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-widest">Text k analýze</label>
+              <label htmlFor="main-input" className="text-lg font-bold text-slate-700 dark:text-slate-200 uppercase tracking-widest">Text k analýze</label>
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-semibold" aria-live="polite">
                   {inputText.replace(/\s/g, '').length} znaků
-                </span>
+                </span>            
                 <button
                   onClick={() => setInputText('')}
                   disabled={!inputText}
@@ -128,6 +128,7 @@ const App: React.FC = () => {
                 </button>
               </div>
             </div>
+
             <textarea
               id="main-input"
               className="w-full h-40 p-4 bg-white dark:bg-slate-950 border-2 border-slate-200 dark:border-slate-700/50 rounded-xl focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 dark:focus:ring-purple-400/20 outline-none transition-all resize-none text-lg dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500"
@@ -135,6 +136,28 @@ const App: React.FC = () => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
             />
+
+            <div className="flex items-center gap-3 pt-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsCaseSensitive(!isCaseSensitive)}
+                  type="button"
+                  role="switch"
+                  aria-checked={isCaseSensitive}
+                  className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:ring-2 focus:ring-purple-400 outline-none ${
+                    isCaseSensitive ? 'bg-indigo-500' : 'bg-slate-300 dark:bg-slate-600'
+                  }`}
+                  aria-label="Rozlišovat velikost písmen"
+                >
+                  <span
+                    className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                      isCaseSensitive ? 'translate-x-6' : 'translate-x-0.5'
+                    }`}
+                  />
+                </button>
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Rozlišovat velikost (a/A)</span>
+              </div>
+            </div>
 
             <div className="flex flex-wrap gap-3">
               <button
@@ -149,22 +172,6 @@ const App: React.FC = () => {
                 📁 Nahrát
                 <input type="file" className="hidden" onChange={handleFileUpload} accept=".txt" aria-label="Nahrát textový soubor" />
               </label>
-            </div>
-
-            <div className="flex items-center gap-4 py-3 border-t border-slate-200 dark:border-slate-700/50">
-              <button
-                type="button"
-                role="switch"
-                aria-checked={isCaseSensitive}
-                onClick={() => setIsCaseSensitive(!isCaseSensitive)}
-                className="flex items-center gap-3 group outline-none focus:ring-2 focus:ring-purple-400 rounded-lg p-1"
-                aria-label="Rozlišovat velikost písmen"
-              >
-                <div className={`w-12 h-6 rounded-full p-1 transition-all ${isCaseSensitive ? 'bg-gradient-to-r from-indigo-500 to-purple-500' : 'bg-slate-300 dark:bg-slate-600'}`}>
-                  <div className={`bg-white w-4 h-4 rounded-full transition-transform ${isCaseSensitive ? 'translate-x-6' : 'translate-x-0'}`} />
-                </div>
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Rozlišovat velikost (a/A)</span>
-              </button>
             </div>
           </div>
         </Card>
@@ -211,7 +218,8 @@ const App: React.FC = () => {
         </div>
 
         <Card title="📊 Detailní výsledky" className="dark:bg-slate-900 dark:border-slate-700/50">
-          <div className="flex flex-wrap gap-2 mb-8 p-1.5 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-900/30 rounded-xl" role="tablist" aria-label="Filtr kategorií">
+
+          <div className="flex flex-wrap gap-2 p-1.5 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-900/30 rounded-xl" role="tablist" aria-label="Filtr kategorií">
             {(['all', 'letters', 'diacritics', 'symbols', 'numbers'] as AnalysisCategory[]).map((cat) => (
               <button
                 key={cat}
@@ -229,8 +237,26 @@ const App: React.FC = () => {
             ))}
           </div>
 
+          <div className="flex flex-wrap gap-2 p-1.5 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800/50 dark:to-slate-900/30 rounded-xl mb-6" role="tablist" aria-label="Řazení výsledků">
+            {(['alphabetical', 'frequency'] as SortMode[]).map((mode) => (
+              <button
+                key={mode}
+                role="tab"
+                aria-selected={sortMode === mode}
+                onClick={() => setSortMode(mode)}
+                className={`py-2 px-3 rounded-lg text-xs font-bold transition-all focus:ring-2 focus:ring-purple-400 outline-none ${
+                  sortMode === mode
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/30'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+              >
+                {mode === 'alphabetical' ? '🔤 A-Z' : '📊 Výskyt'}
+              </button>
+            ))}
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" aria-live="polite">
-            {(Object.entries(filteredResults) as [string, number][]).sort((a, b) => b[1] - a[1]).map(([char, count]) => {
+            {sortCharacters(Object.entries(filteredResults) as [string, number][], sortMode, isCaseSensitive).map(([char, count]) => {
               const display = getCharDisplay(char);
               const originalCount = (originalResults[category === 'all' ? 'letters' : category] as CharacterCounts)?.[char] || 0;
               const isDiscounted = (discountMap[char] || 0) > 0;
@@ -269,7 +295,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="max-w-6xl mx-auto px-4 py-12 border-t border-slate-200 dark:border-slate-800 text-center text-slate-400 text-sm">
-        <p className="font-medium">🚨 Četník - Analyzátor textu</p>
+        <p className="font-medium">🚨 Četník - Počítá písmena a další znaky v textu</p>
         <p className="mt-2 text-xs">Všechna data jsou zpracovávána lokálně ve vašem prohlížeči.</p>
       </footer>
     </div>

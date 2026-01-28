@@ -1,5 +1,5 @@
-
 export type AnalysisCategory = 'letters' | 'diacritics' | 'numbers' | 'symbols' | 'all';
+export type SortMode = 'alphabetical' | 'frequency';
 
 export interface CharacterCounts {
   [key: string]: number;
