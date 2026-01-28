@@ -15,9 +15,9 @@
     "moduleDetection": "force",
     "allowJs": true,
     "jsx": "react-jsx",
-    "baseUrl": "./cetnik",
     "paths": {
       "@/*": ["./*"],
+      "assets/*": ["./cetnik/assets/*"],
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
